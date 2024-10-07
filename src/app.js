@@ -1,6 +1,7 @@
 import express from 'express'
 import dbConnection from './config/dbConnect.js'
 import routes from './routes/index.js'
+import cors from 'cors'
 
 const connection = await dbConnection()
 connection.on('error', (err) => {
@@ -12,6 +13,7 @@ connection.once('open', () => {
 })
 
 const app = express()
+app.use(cors())
 routes(app)
 
 export default app
