@@ -2,6 +2,7 @@ import express from 'express'
 import dbConnection from './config/dbConnect.js'
 import routes from './routes/index.js'
 import cors from 'cors'
+import cookieParser from 'cookie-parser'
 
 const connection = await dbConnection()
 connection.on('error', (err) => {
@@ -13,7 +14,11 @@ connection.once('open', () => {
 })
 
 const app = express()
-app.use(cors())
+app.use(cookieParser())
+app.use(cors({
+    origin: 'http://localhost:3001',
+    credentials: true
+}))
 routes(app)
 
 export default app

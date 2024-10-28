@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String },
     password: { type: String },
-}, { versionKey: false })
+}, { versionKey: false }) // timestamp: true
 
 const user = mongoose.model("users", userSchema)
 

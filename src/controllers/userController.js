@@ -105,20 +105,33 @@ class UserController {
         const userExists = await user.findOne({ email: email })
 
         if (!userExists) {
-            return res.status(400).send('Invalid credentials')
+            return res.status(400).send('Invalid user')
         }
 
         const validPassword = await bcrypt.compare(password, userExists.password)
 
         if (!validPassword) {
-            return res.status(400).send('Invalid credentials')
+            return res.status(400).send('Invalid password')
         }
 
         try {
             const token = generateToken(userExists)
-            res.status(200).json({ msg: 'Login successful', token, userExists })
+            res.status(200).json({ msg: 'Login successful', token, id: userExists._id });
         } catch (error) {
             res.status(500).send('Something went wrong in the server')
+        }
+    }
+
+    static async dashboard(req, res) {
+        const { id } = req.params
+        try {
+            const userFound = await user.findById(id)
+            if (!userFound) {
+                return res.status(404).send('User not found')
+            }
+            res.status(200).json({ msg: 'Welcome to your dashboard', userFound })
+        } catch (error) {
+            res.status(500).json({ msg: "Something went wrong in the server", error: error.message })
         }
     }
 }
