@@ -8,7 +8,8 @@ const bookSchema = new mongoose.Schema({
     releaseDate: { type: String },
     description: { type: String },
     pageCount: { type: Number },
-    users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
+    users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    textFileId: {type: mongoose.Schema.Types.ObjectId}
 }, { timestamps: true })
 
 const book = mongoose.model('books', bookSchema)

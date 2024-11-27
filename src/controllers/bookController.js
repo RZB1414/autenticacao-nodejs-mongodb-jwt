@@ -1,4 +1,9 @@
 import book from '../models/Book.js'
+import dbConnection from '../config/dbConnect.js'
+import multer from 'multer'
+
+const storage = multer.memoryStorage()
+const upload = multer({ storage })
 
 class BookController {
 
@@ -55,6 +60,44 @@ class BookController {
         } catch (error) {
             res.status(500).json({ msg: "Something went wrong in the server", error: error.message })
         }
+    }
+
+    static async uploadTextFile(req, res) {
+        const { id } = req.params
+        console.log(id);
+        
+        const { connection, bucket } = await dbConnection()
+
+        if(!connection || !bucket) {
+            return res.status(500).json({ msg: 'Error connecting to the database' })
+        }
+
+        const textFile = req.file
+        console.log(textFile);
+        
+
+        if(!textFile) {
+            return res.status(400).json({ msg: 'Text file is required' })
+        }
+
+        const uploadStream = bucket.openUploadStream(textFile.originalname, {
+            contentType: textFile.mimetype,
+        })
+
+        uploadStream.end(textFile.buffer)
+
+        uploadStream.on('finish', async () => {
+            try {
+                await book.findOneAndUpdate({ id: id }, { textFileId: uploadStream.id })
+                res.status(200).json({ msg: 'Text file uploaded successfully' })
+            } catch (error) {
+                res.status(500).json({ msg: "Something went wrong in the server", error: error.message })
+            }
+        })
+
+        uploadStream.on('error', (error) => {
+            res.status(500).json({ msg: 'Error uploading text file', error: error.message })
+        })
     }
 
     static async deleteBook(req, res) {
