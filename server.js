@@ -1,12 +1,12 @@
 import 'dotenv/config'
 import app from './src/app.js'
-import dbConnection from './src/config/dbConnect.js'
+import { dbConnection, connection } from './src/config/dbConnect.js'
 
 const PORT = 3000
 
 async function startServer() {
     try {
-        const { connection } = await dbConnection()
+        await dbConnection()
         
         if (!connection) {
             throw new Error('Database connection failed')
