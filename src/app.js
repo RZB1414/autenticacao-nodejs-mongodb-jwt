@@ -7,7 +7,7 @@ const app = express()
 
 app.use(cookieParser())
 app.use(cors({
-    origin: '*',
+    origin: 'https://react-autenticacao-nodejs-mongodb-jwt.vercel.app',
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
