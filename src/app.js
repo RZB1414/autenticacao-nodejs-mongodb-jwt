@@ -17,7 +17,7 @@ app.use(express.json())
 
 app.use((req, res, next) => {
     req.setTimeout(20000, () => { 
-        res.status(504).send('Request timed out')
+        res.status(504).send('app.js error: Request has timed out.')
     })
     next()
 })

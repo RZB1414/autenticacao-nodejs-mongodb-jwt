@@ -6,7 +6,7 @@ class UserController {
 
     static async getUsers(req, res) {
         try {
-            const users = await user.find({})
+            const users = await user.find({}).exec()
             res.status(200).json(users)
         } catch (error) {
             res.status(500).json({ msg: "Something went wrong in the server", error: error.message })
