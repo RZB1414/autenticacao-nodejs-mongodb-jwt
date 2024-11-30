@@ -15,6 +15,13 @@ app.use(cors({
 app.use(cookieParser())
 app.use(express.json())
 
+app.use((req, res, next) => {
+    req.setTimeout(10000, () => { 
+        res.status(504).send('Request timed out')
+    })
+    next()
+})
+
 routes(app)
 
 export default app
