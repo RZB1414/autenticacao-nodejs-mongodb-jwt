@@ -16,7 +16,7 @@ app.use(cookieParser())
 app.use(express.json())
 
 app.use((req, res, next) => {
-    req.setTimeout(10000, () => { 
+    req.setTimeout(20000, () => { 
         res.status(504).send('Request timed out')
     })
     next()
